@@ -1,0 +1,16 @@
+{
+  "name": "connection_manager",
+  "version": "1.0.0",
+  "description": "A WebSocket server for Lorma to collect local robot connections",
+  "main": "index.js",
+  "repository": "https://github.com/lorma",
+  "author": "asmsuechan",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "lodash": "^4.17.15",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
+    "socketio-wildcard": "^2.0.0"
+  }
+}

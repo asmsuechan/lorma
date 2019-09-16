@@ -10,7 +10,7 @@ let inmemoryDevices = []
 
 app.get('/list_connections', (req, res) => {
   const filteredDevices = _.filter(inmemoryDevices, (device) => {
-    return device.uuid === req.query.uuid
+    return device.geohash === req.query.geohash
   })
 
   res.writeHead(200)

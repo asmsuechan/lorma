@@ -10,7 +10,7 @@ let inmemoryDevices = []
 
 app.get('/list_connections', (req, res) => {
   const filteredDevices = _.filter(inmemoryDevices, (device) => {
-    return device.geohash === req.query.geohash
+    return device.uuid === req.query.uuid
   })
 
   res.writeHead(200)
@@ -29,8 +29,13 @@ io.of('/conn_device')
     });
 
     socket.on('run_launch', function (payload, msg) {
+      const parsedPayload = JSON.parse(payload)
+      const device = _.filter(inmemoryDevices, (device) => {
+        return device.uuid === parsedPayload['uuid']
+      })
+
       console.log(payload)
-      socket.to(payload.socketId).emit('run_launch', { socketId: payload.socketId })
+      socket.to(device.socketId).emit('run_launch', { socketId: device.socketId })
     })
 
     socket.on('disconnect', function () {

@@ -29,9 +29,8 @@ io.of('/conn_device')
     });
 
     socket.on('run_launch', function (payload, msg) {
-      const parsedPayload = JSON.parse(payload)
       const device = _.filter(inmemoryDevices, (device) => {
-        return device.uuid === parsedPayload['uuid']
+        return device.uuid === payload['uuid']
       })
 
       console.log(payload)

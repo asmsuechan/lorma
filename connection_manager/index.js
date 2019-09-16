@@ -32,12 +32,14 @@ io.of('/conn_device')
     });
 
     socket.on('run_launch', function (payload, msg) {
-      const device = _.filter(inmemoryDevices, (device) => {
+      const devices = _.filter(inmemoryDevices, (device) => {
         return device.uuid === payload['uuid']
       })
 
       console.log(payload)
-      socket.to(device.socketId).emit('run_launch', { socketId: device.socketId })
+      _.forEach(devices, (device) => {
+        socket.to(device.socketId).emit('run_launch', { socketId: device.socketId })
+      })
     })
 
     socket.on('disconnect', function () {

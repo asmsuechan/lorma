@@ -5,7 +5,7 @@ const io = require('socket.io')(server);
 const _ = require('lodash')
 const Robot = require('./robot')
 
-server.listen(3000);
+server.listen(80);
 
 let inmemoryDevices = []
 

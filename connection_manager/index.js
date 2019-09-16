@@ -1,4 +1,5 @@
 const app = require('express')();
+const cors = require('cors');
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const _ = require('lodash')
@@ -7,6 +8,8 @@ const Robot = require('./robot')
 server.listen(3000);
 
 let inmemoryDevices = []
+
+app.use(cors())
 
 app.get('/list_connections', (req, res) => {
   const filteredDevices = _.filter(inmemoryDevices, (device) => {

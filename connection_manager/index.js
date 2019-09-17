@@ -36,9 +36,8 @@ io.of('/conn_device')
         return device.uuid === payload['uuid']
       })
 
-      console.log(payload)
       _.forEach(devices, (device) => {
-        socket.to(device.socketId).emit('run_launch', { socketId: device.socketId })
+        socket.to(device.socketId).emit('run_launch', { socketId: device.socketId, command: payload.command })
       })
     })
 

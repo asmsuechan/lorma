@@ -23,6 +23,7 @@ class Lorma {
   runLaunch(uuid, command) {
     const socket = io.connect(`${this.baseURL}/conn_device`);
     socket.on('connect', () => {
+      console.log('payloads: ', { uuid, command })
       socket.emit('run_launch', { uuid, command });
       // TODO: Get response from server to wait some event
       socket.close();

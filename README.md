@@ -56,5 +56,7 @@ $ npm start
 
 ## Structure
 
+![img3](/images/execute-command.png)
 
 ## Development
+TODO

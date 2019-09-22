@@ -55,7 +55,7 @@ $ npm start
 ![img2](/images/sample-application.png)
 
 ## Structure
-
+The structure of this system is shown as below. I provide the connection manager at lorma.rourse.com and use it by default.
 ![img3](/images/execute-command.png)
 
 ## Development

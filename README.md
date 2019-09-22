@@ -52,7 +52,7 @@ $ npm start
 ```
 
 #### 4. Open localhost:3000
-(Image)
+![img2](/images/sample-application.png)
 
 ## Structure
 

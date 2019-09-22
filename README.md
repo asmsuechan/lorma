@@ -1,7 +1,11 @@
 # Lorma
 > Run local robots over the Internet
 
-Lorma is a ROS based robot management system which allows robots run `roslaunch` through the Internet. Lorma stands for **Lo**cal **R**obot **Ma**nager.
+* Easy to integrate
+* Clear API
+* Prepared cloud server
+
+Lorma is a ROS based robots management system which allows robots run `roslaunch` through the Internet. Lorma stands for **Lo**cal **R**obot **Ma**nager.
 
 ## Get started
 

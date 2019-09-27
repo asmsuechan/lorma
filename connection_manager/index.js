@@ -7,13 +7,13 @@ const Robot = require('./robot')
 
 server.listen(80);
 
-let inmemoryDevices = []
+let inmemoryDatabase = []
 
 app.use(cors())
 
 app.get('/list_connections', (req, res) => {
-  const filteredDevices = _.filter(inmemoryDevices, (device) => {
-    return device.geohash === req.query.geohash
+  const filteredDevices = _.filter(inmemoryDatabase, (device) => {
+    return _.get(device, 'geohash') === _.get(req, 'query.geohash')
   })
 
   res.writeHead(200)
@@ -27,13 +27,13 @@ io.of('/conn_device')
       if (!payload) return
       const parsedPayload = JSON.parse(payload)
       const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['geohash'], parsedPayload['launch_commands'])
-      inmemoryDevices.push(robot)
-      console.log('registered: ', inmemoryDevices);
+      inmemoryDatabase.push(robot)
+      console.log('registered: ', inmemoryDatabase);
     });
 
     socket.on('run_launch', function (payload, msg) {
-      const devices = _.filter(inmemoryDevices, (device) => {
-        return device.uuid === payload['uuid']
+      const devices = _.filter(inmemoryDatabase, (device) => {
+        return _.get(device, 'uuid') === payload['uuid']
       })
 
       _.forEach(devices, (device) => {
@@ -42,9 +42,9 @@ io.of('/conn_device')
     })
 
     socket.on('disconnect', function () {
-      const index = _.findIndex(inmemoryDevices, (device) => {
-        return device.socketId === socket.id
+      const index = _.findIndex(inmemoryDatabase, (device) => {
+        return _.get(device, 'socketId') === socket.id
       })
-      delete inmemoryDevices[index]
+      delete inmemoryDatabase[index]
     });
 });

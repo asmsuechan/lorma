@@ -25,12 +25,12 @@ $ git clone git@github.com:asmsuechan/lorma.git ~/
 #### 2. Copy `lorma_ros` into your ros workspace
 
 ```
-$ cp -rf ~/lorma/lorma_ros ~/catkin_ws
+$ cp -rf ~/lorma/lorma_ros ~/catkin_ws/src
 ```
 
 #### 3. Run `lorma_ros`
 ```
-$ cd ~/catkin_ws/lorma_ros
+$ cd ~/catkin_ws
 $ rosrun lorma_ros launch_runner.py
 ```
 

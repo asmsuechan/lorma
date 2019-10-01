@@ -1,4 +1,4 @@
-# Lorma client js
+# Rowma client js
 
 # License
 MIT © asmsuechan

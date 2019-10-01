@@ -1,5 +1,5 @@
 {
-  "name": "lorma_js",
+  "name": "rowma_js",
   "version": "1.0.1",
   "description": "Local Robot Manager for JS",
   "main": "./lib/index.js",
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/asmsuechan/lorma.git"
+    "url": "git+https://github.com/asmsuechan/rowma.git"
   },
   "keywords": [
     "boilerplate",
@@ -33,9 +33,9 @@
   "author": "asmsuechan <suenagaryoutaabc@gmail.com>",
   "license": "mit",
   "bugs": {
-    "url": "https://github.com/asmsuechan/lorma/issues"
+    "url": "https://github.com/asmsuechan/rowma/issues"
   },
-  "homepage": "https://github.com/asmsuechan/lorma",
+  "homepage": "https://github.com/asmsuechan/rowma",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^10.0.1",

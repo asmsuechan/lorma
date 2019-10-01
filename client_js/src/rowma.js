@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 
 import getGeohash from './geolocation';
 
-class Lorma {
+class Rowma {
   constructor(geohash, opts = {}) {
     this.geohash = geohash;
 
@@ -31,4 +31,4 @@ class Lorma {
   }
 }
 
-export default Lorma;
+export default Rowma;

@@ -46,7 +46,7 @@ Then confirm the UUID provided by the ROS process.
 
 ![img1](/doc/images/rosrun.png)
 
-### (2) On another computer
+### (2) Setup Sample Web Manager
 #### 1. Clone sample repository
 ```
 $ git clone git@github.com:asmsuechan/rowma_sample.git ~/

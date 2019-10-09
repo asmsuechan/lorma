@@ -9,17 +9,10 @@ import subprocess as sp
 import uuid
 from rosbridge_library.rosbridge_protocol import RosbridgeProtocol
 
-# ############################
-# init RosBridgeProtocol
-# ############################
 rospy.init_node('launch_runner')
 client_id_seed = 0;
 protocol = RosbridgeProtocol(client_id_seed)
 
-
-# ############################
-# init Socket.io
-# ############################
 sio = socketio.Client()
 
 def get_geohash():
@@ -43,7 +36,6 @@ def path_to_command(path):
     return splited_path[launch_index - 1] + ' ' + splited_path[launch_index + 1]
 
 def list_launch_commands():
-    #print(sp.check_output('pwd', shell=True).decode('utf-8').strip().split('\n'))
     packages = sp.check_output("find ./src/ | grep \'\\.launch\'", shell=True).decode('utf-8').strip().split('\n')
     commands = []
     for package_path in packages:
@@ -88,7 +80,6 @@ def on_message(data):
 # ############################
 def outgoing_func(message):
     msg = json.loads(message)
-    #sio.emit('register_geohash', json.dumps(msg), namespace='/conn_device')
 
 protocol.outgoing = outgoing_func
 
@@ -97,5 +88,4 @@ def disconnect():
     print('disconnected from server')
 
 sio.connect('18.176.1.219')
-#sio.emit('register_geohash', {'geohash': 'abcde'}, namespace='/conn_device')
 sio.wait()

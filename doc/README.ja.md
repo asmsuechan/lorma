@@ -1,23 +1,24 @@
 # Rowma
 > Run local robots over the Internet
 
+RowmaはROSベースのロボットを管理するシステムで、`roslaunch`をインターネット越しに実行することが出来ます。また、以下の特徴を持っています。
+
 * 既存ROSシステムに組み込みやすい
 * 分かりやすいAPI
 * クラウドサーバーの提供
 
-RowmaはROSベースのロボットを管理するシステムで、`roslaunch`をインターネット越しに実行することが出来ます。また、Rowmaは**RO**S **W**eb **Ma**nagerの略です。
+なお、Rowmaは**RO**S **W**eb **Ma**nagerの略です。
 
 [English](/README.md)
 
 ## Get started
+このチュートリアルでは[rowma_sample](https://github.com/asmsuechan/rowma_sample)を使ってインターネット越しに実行可能なroslaunchを実行します。
 
-### ROS関係ソフトウェアのバージョン
+### (1) ロボット側での処理
+### 必要環境
 * Python: 2.7
 * ROS: Kinetic
 
-このチュートリアルでは[rowma_sample](https://github.com/asmsuechan/rowma_sample)を使っています。
-
-### (1) ロボット側での処理
 #### 1. このリポジトリをcloneする
 ```
 $ git clone git@github.com:asmsuechan/rowma.git ~/
@@ -45,6 +46,7 @@ UUIDがROSのプロセスによって生成されて画面上に表示されて�
 #### 必要環境
 このサンプルを実行するには以下のソフトウェアをインストールする必要があります。
 
+* Google Chrome
 * nodejs
 
 #### 1. サンプルのリポジトリをcloneする

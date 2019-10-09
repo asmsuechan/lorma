@@ -7,7 +7,7 @@ class Rowma {
   constructor(geohash, opts = {}) {
     this.geohash = geohash;
 
-    this.baseURL = opts.baseURL || 'http://ec2-54-199-179-50.ap-northeast-1.compute.amazonaws.com';
+    this.baseURL = opts.baseURL || '18.176.1.219';
     this.client = axios.create({
       baseURL: this.baseURL,
       timeout: 1000

@@ -96,6 +96,6 @@ protocol.outgoing = outgoing_func
 def disconnect():
     print('disconnected from server')
 
-sio.connect('http://ec2-54-199-179-50.ap-northeast-1.compute.amazonaws.com')
+sio.connect('18.176.1.219')
 #sio.emit('register_geohash', {'geohash': 'abcde'}, namespace='/conn_device')
 sio.wait()

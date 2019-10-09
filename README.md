@@ -5,7 +5,9 @@
 * Clear API
 * Prepared cloud server
 
-Rowma is a ROS based robots management system which allows robots run `roslaunch` through the Internet. Rowma stands for **RO**s **W**eb **Ma**nager.
+Rowma is a ROS based robots management system which allows robots run `roslaunch` through the Internet. Rowma stands for **RO**S **W**eb **Ma**nager.
+
+[日本語](/doc/README.ja.md)
 
 ## Get started
 
@@ -42,7 +44,7 @@ $ rosrun rowma_ros launch_runner.py
 
 Then confirm the UUID provided by the ROS process.
 
-![img1](/images/rosrun.png)
+![img1](/doc/images/rosrun.png)
 
 ### (2) On another computer
 #### 1. Clone sample repository
@@ -62,11 +64,11 @@ $ npm start
 ```
 
 #### 4. Open localhost:3000
-![img2](/images/sample-application.png)
+![img2](/doc/images/sample-application.png)
 
 ## Structure
 The structure of this system is shown as below. I provide the connection manager at rowma.rourse.com and use it by default.
-![img3](/images/execute-command.png)
+![img3](/doc/images/execute-command.png)
 
 ## Development
 TODO

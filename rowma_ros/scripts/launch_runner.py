@@ -88,11 +88,10 @@ protocol.outgoing = outgoing_func
 def disconnect():
     print('disconnected from server')
 
-def signal_handler(signal, frame):
-    sio.disconnect()
-    sys.exit(0)
+def signal_handler(sig, frame):
+        sio.disconnect()
+        sys.exit(0)
 
-sio.connect('18.176.1.219')
-sio.wait()
-
+sio.connect('http://18.176.1.219')
 signal.signal(signal.SIGINT, signal_handler)
+signal.pause()

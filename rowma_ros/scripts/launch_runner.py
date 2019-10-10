@@ -8,6 +8,7 @@ import Geohash
 import subprocess as sp
 import uuid
 from rosbridge_library.rosbridge_protocol import RosbridgeProtocol
+import signal
 
 rospy.init_node('launch_runner')
 client_id_seed = 0;
@@ -87,5 +88,11 @@ protocol.outgoing = outgoing_func
 def disconnect():
     print('disconnected from server')
 
+def signal_handler(signal, frame):
+    sio.disconnect()
+    sys.exit(0)
+
 sio.connect('18.176.1.219')
 sio.wait()
+
+signal.signal(signal.SIGINT, signal_handler)

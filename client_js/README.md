@@ -24,7 +24,7 @@ rowma.runLaunch(connectionUuid, command)
 ```
 
 # Methods API
-### constructor(geohash, options = {})
+## constructor(geohash, options = {})
 ```nodejs
 const rowma = new Rowma('geohash')
 ```
@@ -38,7 +38,7 @@ const rowma = new Rowma('geohash')
 #### Returns
 A Rowma object
 
-### currentConnectionList()
+## currentConnectionList()
 Get a list of connection list.
 
 #### Parameters
@@ -47,7 +47,7 @@ No parameters
 #### Returns
 An axios response object is returned.
 
-### runLaunch(uuid, command)
+## runLaunch(uuid, command)
 Send a WebSocket request to the connection manager with uuid and command.
 
 #### Parameters

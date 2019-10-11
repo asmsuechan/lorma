@@ -9,13 +9,17 @@ import subprocess as sp
 import uuid
 from rosbridge_library.rosbridge_protocol import RosbridgeProtocol
 import signal
+import os
+import re
 
 rospy.init_node('launch_runner')
-client_id_seed = 0;
+client_id_seed = 0
 protocol = RosbridgeProtocol(client_id_seed)
 
 sio = socketio.Client()
 
+# Description: Get geohash from IP address
+# output: geohash <string> 'xn774h0'
 def get_geohash():
     url = "https://freegeoip.app/json/"
 
@@ -24,6 +28,9 @@ def get_geohash():
     precision = 6 # cut to 6 characters
     return geohash[:precision]
 
+# Description: Shape path to roslaunch available command.
+# @param: path <string> '/dir/package_name/launch/package.launch'
+# output: command <string> 'package_name package.launch'
 def path_to_command(path):
     splited_path = path.split('/')
     if (len(splited_path) < 3):
@@ -36,8 +43,21 @@ def path_to_command(path):
         i += 1
     return splited_path[launch_index - 1] + ' ' + splited_path[launch_index + 1]
 
+# Description: Get package commands list located at ROS_PACKAGE_PATH environment variable
+# output: commands Array<string> ['package_name package.launch']
 def list_launch_commands():
-    packages = sp.check_output("find ./src/ | grep \'\\.launch\'", shell=True).decode('utf-8').strip().split('\n')
+    ros_package_path = os.environ['ROS_PACKAGE_PATH']
+    paths = ros_package_path.split(':')
+
+    if len(paths) < 1:
+        sys.exit('Set ROS_PACKAGE_PATH correctly')
+
+    packages = []
+    for path in paths:
+        m = re.match(r'^/opt/ros', path)
+        if m:
+            break
+        packages += sp.check_output("find " + path + " | grep \'\\.launch\'", shell=True).decode('utf-8').strip().split('\n')
     commands = []
     for package_path in packages:
         commands.append(path_to_command(package_path))

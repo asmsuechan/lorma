@@ -77,9 +77,7 @@ def connect():
     sio.emit('register_geohash', json.dumps(msg), namespace='/conn_device')
     print('Your UUID is: ' + id)
 
-# ############################
-# on websocket message
-# ############################
+# On reveived a websocket message
 @sio.event
 def message(data):
     print('message received with ', data)
@@ -96,9 +94,6 @@ def on_message(data):
         print('run_launch')
         print(data)
 
-# ############################
-# on ros message
-# ############################
 def outgoing_func(message):
     msg = json.loads(message)
 

@@ -31,7 +31,7 @@ const rowma = new Rowma('geohash')
 
 #### Parameters
 |Name|Type|Required|Description|
-|:-|:-|:-|
+|:-|:-|:-|:-|
 |geohash|string|true|A geohash to specify the user|
 |options|Object|false||
 
@@ -52,7 +52,7 @@ Send a WebSocket request to the connection manager with uuid and command.
 
 #### Parameters
 |Name|Type|Required|Description|
-|:-|:-|:-|
+|:-|:-|:-|:-|
 |uuid|string|true||
 |command|string|true||
 

@@ -2,8 +2,8 @@ import axios from 'axios';
 import io from 'socket.io-client';
 
 class Rowma {
-  constructor(geohash, opts = {}) {
-    this.geohash = geohash;
+  constructor(geocode, opts = {}) {
+    this.geocode = geocode;
 
     this.baseURL = opts.baseURL || 'http://18.176.1.219';
     this.client = axios.create({
@@ -14,7 +14,7 @@ class Rowma {
 
   currentConnectionList() {
     const path = '/list_connections';
-    const params = { geohash: this.geohash };
+    const params = { geocode: this.geocode };
     return this.client.get(path, { params });
   }
 

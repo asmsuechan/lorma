@@ -70,7 +70,7 @@ def connect():
     launch_commands = list_launch_commands()
     id = str(uuid.uuid1())
     msg = {
-            'geocode': geohash,
+            'geocode': geocode,
             'uuid': id,
             'launch_commands': launch_commands
             }

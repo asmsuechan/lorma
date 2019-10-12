@@ -1,8 +1,6 @@
 import axios from 'axios';
 import io from 'socket.io-client';
 
-import getGeohash from './geolocation';
-
 class Rowma {
   constructor(geohash, opts = {}) {
     this.geohash = geohash;
@@ -23,7 +21,7 @@ class Rowma {
   runLaunch(uuid, command) {
     const socket = io.connect(`${this.baseURL}/conn_device`);
     socket.on('connect', () => {
-      console.log('payloads: ', { uuid, command })
+      console.log('payloads: ', { uuid, command });
       socket.emit('run_launch', { uuid, command });
       // TODO: Get response from server to wait some event
       socket.close();

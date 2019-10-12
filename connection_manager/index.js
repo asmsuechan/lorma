@@ -13,7 +13,7 @@ app.use(cors())
 
 app.get('/list_connections', (req, res) => {
   const filteredDevices = _.filter(inmemoryDatabase, (device) => {
-    return _.get(device, 'geohash') === _.get(req, 'query.geohash')
+    return _.get(device, 'geocode') === _.get(req, 'query.geocode')
   })
 
   res.writeHead(200)
@@ -23,10 +23,10 @@ app.get('/list_connections', (req, res) => {
 
 io.of('/conn_device')
   .on('connection', function (socket) {
-    socket.on('register_geohash', function (payload, msg) {
+    socket.on('register_geocode', function (payload, msg) {
       if (!payload) return
       const parsedPayload = JSON.parse(payload)
-      const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['geohash'], parsedPayload['launch_commands'])
+      const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['geocode'], parsedPayload['launch_commands'])
       inmemoryDatabase.push(robot)
       console.log('registered: ', inmemoryDatabase);
     });

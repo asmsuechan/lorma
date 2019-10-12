@@ -66,15 +66,15 @@ def list_launch_commands():
 @sio.event(namespace='/conn_device')
 def connect():
     print('connection established')
-    geohash = get_geohash()
+    geocode = get_geohash()
     launch_commands = list_launch_commands()
     id = str(uuid.uuid1())
     msg = {
-            'geohash': geohash,
+            'geocode': geohash,
             'uuid': id,
             'launch_commands': launch_commands
             }
-    sio.emit('register_geohash', json.dumps(msg), namespace='/conn_device')
+    sio.emit('register_geocode', json.dumps(msg), namespace='/conn_device')
     print('Your UUID is: ' + id)
 
 # On reveived a websocket message

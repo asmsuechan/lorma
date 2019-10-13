@@ -1,8 +1,8 @@
 class Robot {
-  constructor (uuid, socketId, geohash, launchCommands) {
+  constructor (uuid, socketId, geocode, launchCommands) {
     this.uuid = uuid
     this.socketId = socketId
-    this.geohash = geohash
+    this.geocode = geocode
     this.launchCommands = launchCommands
   }
 }

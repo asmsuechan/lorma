@@ -1,6 +1,8 @@
 # Rowma
 > Run local robots over the Internet
 
+![gifimg](/doc/images/overview.gif)
+
 RowmaはROSベースのロボットを管理するシステムで、`roslaunch`をインターネット越しに実行することが出来ます。また、以下の特徴を持っています。
 
 * 既存ROSシステムに組み込みやすい

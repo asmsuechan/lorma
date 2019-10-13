@@ -3,7 +3,7 @@
 
 ![gifimg](/doc/images/overview.gif)
 
-Rowma is a ROS based robots management system which allows robots run `roslaunch` through the Internet.
+Rowma is a ROS-based robots management system which allows robots run `roslaunch` through the Internet.
 
 * Easy to integrate
 * Clear API
@@ -46,8 +46,6 @@ Then confirm the UUID provided by the ROS process.
 
 ### (2) Setup Sample Web Manager
 #### Environments
-You need to install these software to run this sample.
-
 * Google Chrome
 * nodejs
 

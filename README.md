@@ -37,7 +37,7 @@ $ cp -rf ~/rowma/rowma_ros ~/catkin_ws/src
 $ pip install "python-socketio[client]" requests Geohash
 $ cd ~/catkin_ws
 $ catkin_make
-$ rosrun rowma_ros launch_runner.py
+$ rosrun launch_runner launch_runner.py
 ```
 
 Then confirm the UUID provided by the ROS process.

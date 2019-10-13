@@ -1,7 +1,7 @@
 import axios from 'axios';
 import geohash from 'ngeohash';
 
-const getGeohash = async () => {
+const getGeohash = async (precision = 6) => {
   const options = {
     method: 'GET',
     hostname: 'freegeoip.app',
@@ -15,7 +15,6 @@ const getGeohash = async () => {
   const result = await axios.get('https://freegeoip.app/json/', options)
     .then(res => res.data);
   console.log(geohash.encode(result.latitude, result.longitude));
-  const precision = 6; // cut geohash to 6 characters
   return geohash.encode(result.latitude, result.longitude).slice(0, precision);
 };
 

@@ -59,5 +59,16 @@ Send a WebSocket request to the connection manager with uuid and command.
 #### Returns
 No return values
 
+## getGeohash()
+Get the geohash of current location from its IP address by freegeoip.app.
+
+#### Parameters
+|Name|Type|Required|Description|
+|:-|:-|:-|:-|
+|precision|number|false|The number of geohash characters|
+
+#### Returns
+A geohash string is returned.
+
 # License
 MIT © asmsuechan

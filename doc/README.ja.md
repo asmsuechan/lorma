@@ -72,10 +72,5 @@ $ npm start
 
 ![img2](/doc/images/sample-application.png)
 
-## 構成
-このシステムの構成は以下の図のようになっています。コネクション管理サーバーはこちらで提供しており、デフォルトではこのサーバーに接続するようになっています。
-
-![img3](/doc/images/execute-command.png)
-
 ## Development
 TODO

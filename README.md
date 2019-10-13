@@ -70,9 +70,5 @@ You will see this page.
 
 ![img2](/doc/images/sample-application.png)
 
-## Structure
-The structure of this system is shown as below. I provide the connection manager at rowma.rourse.com and use it by default.
-![img3](/doc/images/execute-command.png)
-
 ## Development
 TODO

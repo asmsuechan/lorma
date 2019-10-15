@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import sys
 import json
+import ast
 import rospy
 import socketio
 import requests
@@ -77,13 +78,10 @@ def connect():
     sio.emit('register_geocode', json.dumps(msg), namespace='/conn_device')
     print('Your UUID is: ' + id)
 
-# On reveived a websocket message
-@sio.event
-def message(data):
-    print('message received with ', data)
-    sio.emit('my response', {'response': 'my response'})
-    message = json.loads(data)
-    protocol.incoming(message)
+@sio.on('rostopic', namespace='/conn_device')
+def on_message(data):
+    message = ast.literal_eval(json.dumps(data))
+    protocol.incoming(json.dumps(message))
 
 @sio.on('run_launch', namespace='/conn_device')
 def on_message(data):
@@ -93,11 +91,6 @@ def on_message(data):
         sp.call("roslaunch " + data.get('command'), shell=True)
         print('run_launch')
         print(data)
-
-def outgoing_func(message):
-    msg = json.loads(message)
-
-protocol.outgoing = outgoing_func
 
 @sio.event
 def disconnect():

@@ -41,6 +41,16 @@ io.of('/conn_device')
       })
     })
 
+    socket.on('delegate', function (payload, msg) {
+      const devices = _.filter(inmemoryDatabase, (device) => {
+        return _.get(device, 'uuid') === payload['uuid']
+      })
+
+      _.forEach(devices, (device) => {
+        socket.to(device.socketId).emit('rostopic', _.get(payload, 'msg'))
+      })
+    })
+
     socket.on('disconnect', function () {
       const index = _.findIndex(inmemoryDatabase, (device) => {
         return _.get(device, 'socketId') === socket.id

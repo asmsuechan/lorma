@@ -18,14 +18,28 @@ class Rowma {
     return this.client.get(path, { params });
   }
 
-  runLaunch(uuid, command) {
-    const socket = io.connect(`${this.baseURL}/conn_device`);
-    socket.on('connect', () => {
-      console.log('payloads: ', { uuid, command });
-      socket.emit('run_launch', { uuid, command });
-      // TODO: Get response from server to wait some event
-      socket.close();
-    });
+  runLaunch(socket, uuid, command) {
+    console.log('payloads: ', { uuid, command });
+    socket.emit('run_launch', { uuid, command });
+  }
+
+  connect() {
+    return new Promise((resolve, reject) => {
+      try {
+        const socket = io.connect(`${this.baseURL}/conn_device`)
+        resolve(socket)
+      } catch (e) {
+        reject(e)
+      }
+    })
+  }
+
+  close(socket) {
+    socket.close()
+  }
+
+  publishTopic(socket, uuid, msg) {
+    socket.emit('delegate', { uuid, msg });
   }
 }
 

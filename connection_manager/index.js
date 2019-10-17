@@ -21,14 +21,37 @@ app.get('/list_connections', (req, res) => {
   res.end()
 });
 
+app.get('/robots', (req, res) => {
+  const robot = _.find(inmemoryDatabase, (r) => {
+    return _.get(r, 'uuid') === _.get(req, 'query.uuid')
+  })
+
+  res.writeHead(200)
+  res.write(JSON.stringify(robot || {}))
+  res.end()
+});
+
 io.of('/conn_device')
   .on('connection', function (socket) {
     // From ROS
     socket.on('register_geocode', function (payload, msg) {
       if (!payload) return
       const parsedPayload = JSON.parse(payload)
-      const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['geocode'], parsedPayload['launch_commands'])
+      const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['geocode'], parsedPayload['launch_commands'], parsedPayload['rosnodes'])
       inmemoryDatabase.push(robot)
+      console.log('registered: ', inmemoryDatabase);
+    });
+
+    // From ROS
+    socket.on('update_rosnodes', function (payload, msg) {
+      if (!payload) return
+      const parsedPayload = JSON.parse(payload)
+      const robot = _.find(inmemoryDatabase, (r) => {
+        return _.get(r, 'uuid') === _.get(parsedPayload, 'uuid')
+      })
+      console.log(parsedPayload)
+      robot.rosnodes = _.get(parsedPayload, 'rosnodes') || []
+
       console.log('registered: ', inmemoryDatabase);
     });
 
@@ -92,4 +115,14 @@ io.of('/conn_device')
         })
       })
     });
+
+    socket.on('kill_rosnodes', function (payload, msg) {
+      //const parsedPayload = JSON.parse(payload)
+      console.log(payload)
+      const robot = _.find(inmemoryDatabase, (r) => {
+        return _.get(r, 'uuid') === _.get(payload, 'uuid')
+      })
+
+      socket.to(robot.socketId).emit('kill_rosnodes', { socketId: robot.socketId, rosnodes: _.get(payload, 'rosnodes') })
+    })
 });

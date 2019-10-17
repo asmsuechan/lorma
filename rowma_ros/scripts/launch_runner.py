@@ -9,9 +9,12 @@ import Geohash
 import subprocess as sp
 import uuid
 from rosbridge_library.rosbridge_protocol import RosbridgeProtocol
+from subprocess import Popen
 import signal
 import os
 import re
+import rosnode
+import time
 
 rospy.init_node('launch_runner')
 client_id_seed = 0
@@ -20,6 +23,7 @@ id = str(uuid.uuid1())
 
 sio = socketio.Client()
 
+launched_nodes = []
 subscribers = []
 
 # Description: Get geohash from IP address
@@ -75,7 +79,8 @@ def connect():
     msg = {
             'geocode': geocode,
             'uuid': id,
-            'launch_commands': launch_commands
+            'launch_commands': launch_commands,
+            'rosnodes': rosnode.get_node_names()
             }
     sio.emit('register_geocode', json.dumps(msg), namespace='/conn_device')
     print('Your UUID is: ' + id)
@@ -93,9 +98,32 @@ def on_message(data):
     launch_commands = list_launch_commands()
     print(launch_commands)
     if data.get('command') in launch_commands:
-        sp.call("roslaunch " + data.get('command'), shell=True)
+        cmd = 'roslaunch ' + data.get('command')
+        launched_nodes.append(Popen(cmd.split()))
+
+        # Note: The launched rosnode-name does not appear the soon after roslaunch is executed.
+        # Therefore, sleep is neccessary to wait it finishes to launch.
+        time.sleep(2)
+        msg = {
+            'uuid': id,
+            'rosnodes': rosnode.get_node_names()
+            }
+        sio.emit('update_rosnodes', json.dumps(msg), namespace='/conn_device')
         print('run_launch')
         print(data)
+
+@sio.on('kill_rosnodes', namespace='/conn_device')
+def on_message(data):
+    rosnode.kill_nodes(data.get('rosnodes'))
+    # Note: The launched rosnode-name does not appear the soon after roslaunch is executed.
+    # Therefore, sleep is neccessary to wait it finishes to launch.
+    time.sleep(2)
+    msg = {
+        'uuid': id,
+        'rosnodes': rosnode.get_node_names()
+        }
+    sio.emit('update_rosnodes', json.dumps(msg), namespace='/conn_device')
+    print('killed')
 
 @sio.event
 def disconnect():
@@ -103,6 +131,8 @@ def disconnect():
 
 def signal_handler(sig, frame):
     sio.disconnect()
+    for node in launched_nodes:
+        node.terminate()
     sys.exit(0)
 
 def outgoing_func(message):

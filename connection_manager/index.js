@@ -12,8 +12,8 @@ let inmemoryDatabase = []
 app.use(cors())
 
 app.get('/list_connections', (req, res) => {
-  const filteredDevices = _.filter(inmemoryDatabase, (device) => {
-    return _.get(device, 'geocode') === _.get(req, 'query.geocode')
+  const filteredDevices = _.filter(inmemoryDatabase, (robot) => {
+    return _.get(robot, 'geocode') === _.get(req, 'query.geocode')
   })
 
   res.writeHead(200)
@@ -23,6 +23,7 @@ app.get('/list_connections', (req, res) => {
 
 io.of('/conn_device')
   .on('connection', function (socket) {
+    // From ROS
     socket.on('register_geocode', function (payload, msg) {
       if (!payload) return
       const parsedPayload = JSON.parse(payload)
@@ -31,30 +32,64 @@ io.of('/conn_device')
       console.log('registered: ', inmemoryDatabase);
     });
 
-    socket.on('run_launch', function (payload, msg) {
-      const devices = _.filter(inmemoryDatabase, (device) => {
-        return _.get(device, 'uuid') === payload['uuid']
+    socket.on('register_device', function (payload, msg) {
+      if (!payload) return
+      const robot = _.find(inmemoryDatabase, (r) => {
+        return _.get(r, 'uuid') === payload['robotUuid']
       })
 
-      _.forEach(devices, (device) => {
-        socket.to(device.socketId).emit('run_launch', { socketId: device.socketId, command: payload.command })
+      if (!robot) return // TODO some handling
+      robot.devices.push({uuid: payload['deviceUuid'], socketId: socket.id})
+
+      const index = _.findIndex(inmemoryDatabase, (r) => {
+        return _.get(r, 'uuid') === robot.id
+      })
+      inmemoryDatabase = _.compact(inmemoryDatabase)
+      console.log(inmemoryDatabase)
+    });
+
+    socket.on('run_launch', function (payload, msg) {
+      const robots = _.filter(inmemoryDatabase, (robot) => {
+        return _.get(robot, 'uuid') === payload['uuid']
+      })
+
+      _.forEach(robots, (robot) => {
+        socket.to(robot.socketId).emit('run_launch', { socketId: robot.socketId, command: payload.command })
       })
     })
 
     socket.on('delegate', function (payload, msg) {
-      const devices = _.filter(inmemoryDatabase, (device) => {
-        return _.get(device, 'uuid') === payload['uuid']
+      console.log(payload)
+      const robots = _.filter(inmemoryDatabase, (robot) => {
+        return _.get(robot, 'uuid') === payload['robotUuid']
       })
 
-      _.forEach(devices, (device) => {
-        socket.to(device.socketId).emit('rostopic', _.get(payload, 'msg'))
+      _.forEach(robots, (robot) => {
+        socket.to(robot.socketId).emit('rostopic', _.get(payload, 'msg'))
       })
     })
 
+    // From ROS
     socket.on('disconnect', function () {
-      const index = _.findIndex(inmemoryDatabase, (device) => {
-        return _.get(device, 'socketId') === socket.id
+      const index = _.findIndex(inmemoryDatabase, (robot) => {
+        return _.get(robot, 'socketId') === socket.id
       })
       delete inmemoryDatabase[index]
+      inmemoryDatabase = _.compact(inmemoryDatabase)
+    });
+
+    // From ROS
+    socket.on('topic_from_ros', function (payload, msg) {
+      const parsedPayload = JSON.parse(payload)
+      const robot = _.find(inmemoryDatabase, (r) => {
+        return _.get(r, 'uuid') === _.get(parsedPayload, 'robotUuid')
+      })
+      _.each(robot.devices, (device) => {
+        _.each(_.get(parsedPayload, 'deviceUuids'), (payloadDeviceUuid) => {
+          if (device.uuid == payloadDeviceUuid) {
+            socket.to(device.socketId).emit('topic_to_device', payload)
+          }
+        })
+      })
     });
 });

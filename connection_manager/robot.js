@@ -4,6 +4,7 @@ class Robot {
     this.socketId = socketId
     this.geocode = geocode
     this.launchCommands = launchCommands
+    this.devices = []
   }
 }
 

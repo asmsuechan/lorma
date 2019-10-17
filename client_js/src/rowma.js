@@ -20,9 +20,19 @@ class Rowma {
     return this.client.get(path, { params });
   }
 
+  getRobotStatus(uuid) {
+    const path = '/robots';
+    const params = { uuid };
+    return this.client.get(path, { params });
+  }
+
   runLaunch(socket, uuid, command) {
     console.log('payloads: ', { uuid, command });
     socket.emit('run_launch', { uuid, command });
+  }
+
+  killNodes(socket, uuid, rosnodes) {
+    socket.emit('kill_rosnodes', { uuid, rosnodes });
   }
 
   registerDevice(socket, robotUuid) {

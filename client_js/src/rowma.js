@@ -1,5 +1,6 @@
 import axios from 'axios';
 import io from 'socket.io-client';
+import uuidv4 from 'uuid/v4';
 
 class Rowma {
   constructor(geocode, opts = {}) {
@@ -10,6 +11,7 @@ class Rowma {
       baseURL: this.baseURL,
       timeout: 1000
     });
+    this.uuid = uuidv4();
   }
 
   currentConnectionList() {
@@ -23,23 +25,43 @@ class Rowma {
     socket.emit('run_launch', { uuid, command });
   }
 
-  connect() {
+  registerDevice(socket, robotUuid) {
+    socket.emit('register_device', { deviceUuid: this.uuid, robotUuid  });
+  }
+
+  connect(robotUuid) {
     return new Promise((resolve, reject) => {
       try {
-        const socket = io.connect(`${this.baseURL}/conn_device`)
-        resolve(socket)
+        const socket = io.connect(`${this.baseURL}/conn_device`);
+        this.registerDevice(socket, robotUuid)
+
+        socket.on('topic_to_device', function (event, args) {
+          console.log("event: ", event, args);
+        });
+        resolve(socket);
       } catch (e) {
-        reject(e)
+        reject(e);
       }
-    })
+    });
   }
 
   close(socket) {
-    socket.close()
+    socket.close();
   }
 
-  publishTopic(socket, uuid, msg) {
-    socket.emit('delegate', { uuid, msg });
+  publishTopic(socket, robotUuid, msg) {
+    socket.emit('delegate', { uuid: robotUuid, msg });
+  }
+
+  subscribeTopic(socket, robotUuid, topic) {
+    // TODO: Make msg JSON string
+    const msg =  {
+      "op": "subscribe",
+      "deviceUuid": this.uuid,
+      "topic": topic
+    }
+
+    socket.emit('delegate', { robotUuid, msg });
   }
 }
 

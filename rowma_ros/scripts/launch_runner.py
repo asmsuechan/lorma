@@ -16,8 +16,11 @@ import re
 rospy.init_node('launch_runner')
 client_id_seed = 0
 protocol = RosbridgeProtocol(client_id_seed)
+id = str(uuid.uuid1())
 
 sio = socketio.Client()
+
+subscribers = []
 
 # Description: Get geohash from IP address
 # output: geohash <string> 'xn774h0'
@@ -69,7 +72,6 @@ def connect():
     print('connection established')
     geocode = get_geohash()
     launch_commands = list_launch_commands()
-    id = str(uuid.uuid1())
     msg = {
             'geocode': geocode,
             'uuid': id,
@@ -80,6 +82,9 @@ def connect():
 
 @sio.on('rostopic', namespace='/conn_device')
 def on_message(data):
+    # TODO: Separate by operation
+    if data['op'] == 'subscribe':
+        subscribers.append({ 'topic': data['topic'], 'deviceUuid': data['deviceUuid'] })
     message = ast.literal_eval(json.dumps(data))
     protocol.incoming(json.dumps(message))
 
@@ -97,8 +102,21 @@ def disconnect():
     print('disconnected from server')
 
 def signal_handler(sig, frame):
-        sio.disconnect()
-        sys.exit(0)
+    sio.disconnect()
+    sys.exit(0)
+
+def outgoing_func(message):
+    print(subscribers)
+    destinations = []
+    msg = json.loads(message)
+    for subscriber in subscribers:
+        if subscriber['topic'] == msg['topic']:
+            destinations.append(subscriber['deviceUuid'])
+    msg['deviceUuids'] = destinations
+    msg['robotUuid'] = id
+    sio.emit('topic_from_ros', json.dumps(msg), namespace='/conn_device')
+
+protocol.outgoing = outgoing_func
 
 sio.connect('http://18.176.1.219')
 signal.signal(signal.SIGINT, signal_handler)

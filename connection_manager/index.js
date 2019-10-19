@@ -37,7 +37,7 @@ io.of('/conn_device')
     socket.on('register_geocode', function (payload, msg) {
       if (!payload) return
       const parsedPayload = JSON.parse(payload)
-      const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['geocode'], parsedPayload['launch_commands'], parsedPayload['rosnodes'])
+      const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['geocode'], parsedPayload['launch_commands'], parsedPayload['rosnodes'], parsedPayload['rosrun_commands'])
       inmemoryDatabase.push(robot)
       console.log('registered: ', inmemoryDatabase);
     });
@@ -78,6 +78,17 @@ io.of('/conn_device')
 
       _.forEach(robots, (robot) => {
         socket.to(robot.socketId).emit('run_launch', { socketId: robot.socketId, command: payload.command })
+      })
+    })
+
+    socket.on('run_rosrun', function (payload, msg) {
+      const robots = _.filter(inmemoryDatabase, (robot) => {
+        return _.get(robot, 'uuid') === payload['uuid']
+      })
+      console.log(payload)
+
+      _.forEach(robots, (robot) => {
+        socket.to(robot.socketId).emit('run_rosrun', { socketId: robot.socketId, command: payload.command, args: payload.args })
       })
     })
 

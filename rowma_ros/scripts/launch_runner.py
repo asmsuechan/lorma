@@ -51,6 +51,21 @@ def path_to_command(path):
         i += 1
     return splited_path[launch_index - 1] + ' ' + splited_path[launch_index + 1]
 
+# /src/ or /devel/lib/
+def path_to_rosrun_command(path):
+    splited_path = path.split('/')
+    if (len(splited_path) < 3):
+        return
+    i = 0
+    result = ''
+    while (i < len(splited_path)):
+        if (splited_path[i] == 'scripts'):
+            result = splited_path[i - 1] + ' ' + splited_path[i + 1]
+        elif (splited_path[i] == 'lib'):
+            result = splited_path[i + 1] + ' ' + splited_path[i + 2]
+        i += 1
+    return result
+
 # Description: Get package commands list located at ROS_PACKAGE_PATH environment variable
 # output: commands Array<string> ['package_name package.launch']
 def list_launch_commands():
@@ -71,16 +86,41 @@ def list_launch_commands():
         commands.append(path_to_command(package_path))
     return commands
 
+def list_rosorun_commands():
+    ros_package_path = os.environ['ROS_PACKAGE_PATH']
+    paths = ros_package_path.split(':')
+
+    if len(paths) < 1:
+        sys.exit('Set ROS_PACKAGE_PATH correctly')
+
+    packages = []
+    for path in paths:
+        m = re.match(r'^/opt/ros', path)
+        if m:
+            break
+        # Cut the last dir path
+        ws_root = re.sub('[^/]+(?=/$|$)', '', path)
+        packages += sp.check_output("find " + ws_root + " -maxdepth 4 -perm -111 -type f | grep -E \'devel|src\'", shell=True).decode('utf-8').strip().split('\n')
+
+    commands = []
+    for package_path in packages:
+        commands.append(path_to_rosrun_command(package_path))
+
+    commands = list(filter(None, commands))
+    return commands
+
 @sio.event(namespace='/conn_device')
 def connect():
     print('connection established')
     geocode = get_geohash()
     launch_commands = list_launch_commands()
+    rosrun_commands = list_rosorun_commands()
     msg = {
             'geocode': geocode,
             'uuid': id,
             'launch_commands': launch_commands,
-            'rosnodes': rosnode.get_node_names()
+            'rosnodes': rosnode.get_node_names(),
+            'rosrun_commands': rosrun_commands
             }
     sio.emit('register_geocode', json.dumps(msg), namespace='/conn_device')
     print('Your UUID is: ' + id)
@@ -91,6 +131,7 @@ def on_message(data):
     if data['op'] == 'subscribe':
         subscribers.append({ 'topic': data['topic'], 'deviceUuid': data['deviceUuid'] })
     message = ast.literal_eval(json.dumps(data))
+    print(message)
     protocol.incoming(json.dumps(message))
 
 @sio.on('run_launch', namespace='/conn_device')
@@ -99,6 +140,26 @@ def on_message(data):
     print(launch_commands)
     if data.get('command') in launch_commands:
         cmd = 'roslaunch ' + data.get('command')
+        launched_nodes.append(Popen(cmd.split()))
+
+        # Note: The launched rosnode-name does not appear the soon after roslaunch is executed.
+        # Therefore, sleep is neccessary to wait it finishes to launch.
+        time.sleep(2)
+        msg = {
+            'uuid': id,
+            'rosnodes': rosnode.get_node_names()
+            }
+        sio.emit('update_rosnodes', json.dumps(msg), namespace='/conn_device')
+        print('run_launch')
+        print(data)
+
+@sio.on('run_rosrun', namespace='/conn_device')
+def on_message(data):
+    rosrun_commands = list_rosorun_commands()
+    print(rosrun_commands)
+    if data.get('command') in rosrun_commands:
+        cmd = 'rosrun ' + data.get('command') + ' ' + data.get('args')
+        print(cmd)
         launched_nodes.append(Popen(cmd.split()))
 
         # Note: The launched rosnode-name does not appear the soon after roslaunch is executed.
@@ -148,6 +209,7 @@ def outgoing_func(message):
 
 protocol.outgoing = outgoing_func
 
-sio.connect('http://18.176.1.219')
+#sio.connect('http://18.176.1.219')
+sio.connect('http://192.168.10.79')
 signal.signal(signal.SIGINT, signal_handler)
 signal.pause()

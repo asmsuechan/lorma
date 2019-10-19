@@ -31,6 +31,11 @@ class Rowma {
     socket.emit('run_launch', { uuid, command });
   }
 
+  runRosrun(socket, uuid, command, args) {
+    console.log('payloads: ', { uuid, command, args });
+    socket.emit('run_rosrun', { uuid, command, args});
+  }
+
   killNodes(socket, uuid, rosnodes) {
     socket.emit('kill_rosnodes', { uuid, rosnodes });
   }
@@ -60,7 +65,7 @@ class Rowma {
   }
 
   publishTopic(socket, robotUuid, msg) {
-    socket.emit('delegate', { uuid: robotUuid, msg });
+    socket.emit('delegate', { robotUuid, msg });
   }
 
   subscribeTopic(socket, robotUuid, topic) {

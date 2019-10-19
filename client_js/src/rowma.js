@@ -50,9 +50,6 @@ class Rowma {
         const socket = io.connect(`${this.baseURL}/conn_device`);
         this.registerDevice(socket, robotUuid)
 
-        socket.on('topic_to_device', function (event, args) {
-          console.log("event: ", event, args);
-        });
         resolve(socket);
       } catch (e) {
         reject(e);

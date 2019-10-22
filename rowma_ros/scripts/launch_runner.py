@@ -209,7 +209,7 @@ def outgoing_func(message):
 
 protocol.outgoing = outgoing_func
 
-#sio.connect('http://18.176.1.219')
-sio.connect('http://192.168.10.79')
+server_url = os.environ.get('ROWMA_SERVER_URL') or 'http://18.176.1.219'
+sio.connect(server_url)
 signal.signal(signal.SIGINT, signal_handler)
 signal.pause()

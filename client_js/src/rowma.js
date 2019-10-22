@@ -27,28 +27,38 @@ class Rowma {
   }
 
   runLaunch(socket, uuid, command) {
-    console.log('payloads: ', { uuid, command });
-    socket.emit('run_launch', { uuid, command });
+    return new Promise((resolve, reject) => {
+      socket.emit('run_launch', { uuid, command }, (res) => resolve(res));
+    });
   }
 
   runRosrun(socket, uuid, command, args) {
-    console.log('payloads: ', { uuid, command, args });
-    socket.emit('run_rosrun', { uuid, command, args});
+    return new Promise((resolve, reject) => {
+      socket.emit('run_rosrun', { uuid, command, args}, (res) => resolve(res));
+    });
   }
 
   killNodes(socket, uuid, rosnodes) {
-    socket.emit('kill_rosnodes', { uuid, rosnodes });
+    return new Promise((resolve, reject) => {
+      socket.emit('kill_rosnodes', { uuid, rosnodes }, (res) => resolve(res));
+    })
   }
 
   registerDevice(socket, robotUuid) {
-    socket.emit('register_device', { deviceUuid: this.uuid, robotUuid  });
+    return new Promise((resolve, reject) => {
+      socket.emit('register_device', { deviceUuid: this.uuid, robotUuid }, (res) => resolve(res));
+    });
   }
 
   connect(robotUuid) {
     return new Promise((resolve, reject) => {
       try {
         const socket = io.connect(`${this.baseURL}/conn_device`);
-        this.registerDevice(socket, robotUuid)
+        this.registerDevice(socket, robotUuid).then(res => {
+          console.log(res)
+        }).catch(e => {
+          console.log('error', e)
+        });
 
         resolve(socket);
       } catch (e) {
@@ -62,7 +72,9 @@ class Rowma {
   }
 
   publishTopic(socket, robotUuid, msg) {
-    socket.emit('delegate', { robotUuid, msg });
+    return new Promise((resolve, reject) => {
+      socket.emit('delegate', { robotUuid, msg }, (res) => resolve(res));
+    })
   }
 
   subscribeTopic(socket, robotUuid, topic) {
@@ -73,7 +85,9 @@ class Rowma {
       "topic": topic
     }
 
-    socket.emit('delegate', { robotUuid, msg });
+    return new Promise((resolve, reject) => {
+      socket.emit('delegate', { robotUuid, msg }, (res) => resolve(res));
+    })
   }
 }
 

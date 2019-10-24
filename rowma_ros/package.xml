@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>launch_runner</name>
+  <name>rowma_ros</name>
   <version>0.0.0</version>
-  <description>The launch_runner package</description>
+  <description>The rowma_ros package</description>
 
   <maintainer email="suenagaryoutaabc@gmail.com">asmsuechan</maintainer>
 
   <license>MIT</license>
 
-  <url type="website">https://github.com/asmsuechan/launch_runner</url>
+  <url type="website">https://github.com/asmsuechan/rowma</url>
 
   <author email="suenagaryoutaabc@gmail.com">asmsuechan</author>
 

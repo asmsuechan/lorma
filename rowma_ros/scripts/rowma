@@ -16,7 +16,7 @@ import re
 import rosnode
 import time
 
-rospy.init_node('launch_runner')
+rospy.init_node('rowma')
 client_id_seed = 0
 protocol = RosbridgeProtocol(client_id_seed)
 id = str(uuid.uuid1())

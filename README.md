@@ -3,15 +3,21 @@
 
 ![gifimg](/doc/images/overview.gif)
 
-Rowma is a ROS-based robots management system which allows robots run `roslaunch` through the Internet.
+Rowma is a ROS-based robots management system which allows robots operate through the Internet.
 
 * Easy to integrate
 * Clear API
-* Prepared cloud server
 
 In addition, Rowma stands for **RO**S **W**eb **Ma**nager.
 
 [日本語](/doc/README.ja.md)
+
+## Features
+* Run `roslaunch` command over the Internet
+* Run `rosrun` command over the Internet
+* Kill a rosnode over the Internet
+* Publish a message to a rostopic over the Internet
+* Subscribe a rostopic over the Internet
 
 ## Get started
 This tutorial uses [rowma_sample](https://github.com/asmsuechan/rowma_sample) to execute roslaunch over the Internet.
@@ -37,7 +43,7 @@ $ cp -rf ~/rowma/rowma_ros ~/catkin_ws/src
 $ pip install "python-socketio[client]" requests Geohash
 $ cd ~/catkin_ws
 $ catkin_make
-$ rosrun launch_runner launch_runner.py
+$ rosrun rowma_ros rowma
 ```
 
 Then confirm the UUID provided by the ROS process.

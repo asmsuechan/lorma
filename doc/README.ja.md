@@ -3,11 +3,10 @@
 
 ![gifimg](/doc/images/overview.gif)
 
-RowmaはROSベースのロボットを管理するシステムで、`roslaunch`をインターネット越しに実行することが出来ます。また、以下の特徴を持っています。
+RowmaはROSベースのロボットを管理するシステムで、ROSに関する操作をインターネット越しに実行することが出来ます。また、以下の特徴を持っています。
 
 * 既存ROSシステムに組み込みやすい
 * 分かりやすいAPI
-* クラウドサーバーの提供
 
 なお、Rowmaは**RO**S **W**eb **Ma**nagerの略です。
 
@@ -37,7 +36,7 @@ $ cp -rf ~/rowma/rowma_ros ~/catkin_ws/src
 $ pip install "python-socketio[client]" requests Geohash
 $ cd ~/catkin_ws
 $ catkin_make
-$ rosrun launch_runner launch_runner.py
+$ rosrun rowma_ros rowma
 ```
 
 UUIDがROSのプロセスによって生成されて画面上に表示されていれば成功です。

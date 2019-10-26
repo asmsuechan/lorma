@@ -4,8 +4,8 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const _ = require('lodash')
 
-const WSResponse = require('./response')
 import Robot from './robot'
+import Device from './device'
 import WSResponse from './response'
 
 server.listen(80);
@@ -30,12 +30,12 @@ app.get('/robots', (req, res) => {
   res.end()
 });
 
-const createSuccessResponse = (data = null) => {
-  return new WSResponse('success', data, null)
+const createSuccessResponse = (data: string = '') => {
+  return new WSResponse('success', data, '')
 }
 
 const createErrorResponse = (error: string = '') => {
-  return new WSResponse('failed', null, error)
+  return new WSResponse('failed', '', error)
 }
 
 io.of('/conn_device')
@@ -75,7 +75,8 @@ io.of('/conn_device')
       })
 
       if (!robot) return // TODO some handling
-      robot.devices.push({uuid: payload['deviceUuid'], socketId: socket.id})
+      const device = new Device(payload['deviceUuid'], socket.id)
+      robot.devices.push(device)
 
       const index = _.findIndex(inmemoryDatabase, (r) => {
         return _.get(r, 'uuid') === robot.id
@@ -168,4 +169,5 @@ io.of('/conn_device')
     })
 });
 
+// Note: https://blog.fullstacktraining.com/cannot-redeclare-block-scoped-variable-name/
 export {}

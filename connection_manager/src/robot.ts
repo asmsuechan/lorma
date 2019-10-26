@@ -1,10 +1,12 @@
+import Device from './device'
+
 export default class Robot {
   uuid: string;
   socketId: string;
   launchCommands: Array<string>;
   rosnodes: Array<string>;
   rosrunCommands: Array<string>;
-  devices: Array<object>;
+  devices: Array<Device>;
 
   constructor (uuid: string, socketId: string, launchCommands: Array<string>, rosnodes: Array<string>, rosrunCommands: Array<string>) {
     this.uuid = uuid

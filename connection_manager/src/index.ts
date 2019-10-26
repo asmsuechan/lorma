@@ -4,12 +4,13 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const _ = require('lodash')
 
-const Robot = require('./robot')
-const Response = require('./response')
+const WSResponse = require('./response')
+import Robot from './robot'
+import WSResponse from './response'
 
 server.listen(80);
 
-let inmemoryDatabase = []
+let inmemoryDatabase: Array<Robot> = []
 
 app.use(cors())
 
@@ -30,22 +31,21 @@ app.get('/robots', (req, res) => {
 });
 
 const createSuccessResponse = (data = null) => {
-  return new Response('success', data, null)
+  return new WSResponse('success', data, null)
 }
 
-const createErrorResponse = (error = null) => {
-  return new Response('failed', null, error)
+const createErrorResponse = (error: string = '') => {
+  return new WSResponse('failed', null, error)
 }
 
 io.of('/conn_device')
   .on('connection', (socket) => {
     // From ROS
-    socket.on('register_robot', (payload, msg) => {
+    socket.on('register_robot', (payload, ack) => {
       if (!payload) {
         const msg = 'Payload must be included.'
-        const errMsg = { msg }
-        const response = createErrorResponse(errMsg)
-        ack(response)
+        const response = createErrorResponse(msg)
+        if (ack) ack(response)
         return
       }
 
@@ -167,3 +167,5 @@ io.of('/conn_device')
       ack(response)
     })
 });
+
+export {}

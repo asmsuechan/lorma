@@ -26,16 +26,6 @@ sio = socketio.Client()
 launched_nodes = []
 subscribers = []
 
-# Description: Get geohash from IP address
-# output: geohash <string> 'xn774h0'
-def get_geohash():
-    url = "https://freegeoip.app/json/"
-
-    location = json.loads(requests.request("GET", url).text)
-    geohash = Geohash.encode(float(location['latitude']), float(location['longitude']))
-    precision = 6 # cut to 6 characters
-    return geohash[:precision]
-
 # Description: Shape path to roslaunch available command.
 # @param: path <string> '/dir/package_name/launch/package.launch'
 # output: command <string> 'package_name package.launch'
@@ -112,17 +102,15 @@ def list_rosorun_commands():
 @sio.event(namespace='/conn_device')
 def connect():
     print('connection established')
-    geocode = get_geohash()
     launch_commands = list_launch_commands()
     rosrun_commands = list_rosorun_commands()
     msg = {
-            'geocode': geocode,
             'uuid': id,
             'launch_commands': launch_commands,
             'rosnodes': rosnode.get_node_names(),
             'rosrun_commands': rosrun_commands
             }
-    sio.emit('register_geocode', json.dumps(msg), namespace='/conn_device')
+    sio.emit('register_robot', json.dumps(msg), namespace='/conn_device')
     print('Your UUID is: ' + id)
 
 @sio.on('rostopic', namespace='/conn_device')

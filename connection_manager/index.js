@@ -14,12 +14,8 @@ let inmemoryDatabase = []
 app.use(cors())
 
 app.get('/list_connections', (req, res) => {
-  const filteredDevices = _.filter(inmemoryDatabase, (robot) => {
-    return _.get(robot, 'geocode') === _.get(req, 'query.geocode')
-  })
-
   res.writeHead(200)
-  res.write(JSON.stringify(filteredDevices))
+  res.write(JSON.stringify(inmemoryDatabase))
   res.end()
 });
 
@@ -44,7 +40,7 @@ const createErrorResponse = (error = null) => {
 io.of('/conn_device')
   .on('connection', (socket) => {
     // From ROS
-    socket.on('register_geocode', (payload, msg) => {
+    socket.on('register_robot', (payload, msg) => {
       if (!payload) {
         const msg = 'Payload must be included.'
         const errMsg = { msg }
@@ -54,7 +50,7 @@ io.of('/conn_device')
       }
 
       const parsedPayload = JSON.parse(payload)
-      const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['geocode'], parsedPayload['launch_commands'], parsedPayload['rosnodes'], parsedPayload['rosrun_commands'])
+      const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['launch_commands'], parsedPayload['rosnodes'], parsedPayload['rosrun_commands'])
       inmemoryDatabase.push(robot)
       console.log('registered: ', inmemoryDatabase);
     });

@@ -44,14 +44,15 @@ def path_to_command(path):
 # /src/ or /devel/lib/
 def path_to_rosrun_command(path):
     splited_path = path.split('/')
-    if (len(splited_path) < 3):
-        return
+    if (len(splited_path) < 3): return
     i = 0
     result = ''
     while (i < len(splited_path)):
         if (splited_path[i] == 'scripts'):
             result = splited_path[i - 1] + ' ' + splited_path[i + 1]
         elif (splited_path[i] == 'lib'):
+            # To deal with ~/catkin_ws/devel/lib/some_lib.so
+            if (i + 2 >= len(splited_path)): break
             result = splited_path[i + 1] + ' ' + splited_path[i + 2]
         i += 1
     return result

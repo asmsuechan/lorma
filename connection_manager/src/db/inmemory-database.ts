@@ -2,8 +2,8 @@ import _ from 'lodash'
 
 import DatabaseInterface from './database-interface'
 
-import Robot from '../robot'
-import Device from '../device'
+import Robot from '../domain/robot'
+import Device from '../domain/device'
 
 export default class InmemoryDatabase implements DatabaseInterface {
   robotInmemoryDatabase: Array<Robot>;
@@ -78,13 +78,5 @@ export default class InmemoryDatabase implements DatabaseInterface {
     } catch {
       return false
     }
-  }
-
-  compactRobotDb(): void {
-    this.robotInmemoryDatabase = _.compact(this.robotInmemoryDatabase)
-  }
-
-  compactDeviceDb(): void {
-    this.deviceInmemoryDatabase = _.compact(this.deviceInmemoryDatabase)
   }
 }

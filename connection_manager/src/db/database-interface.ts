@@ -1,5 +1,5 @@
-import Robot from '../robot'
-import Device from '../device'
+import Robot from '../domain/robot'
+import Device from '../domain/device'
 
 export default interface DatabaseInterface {
   getAllRobots(): Array<Robot>;

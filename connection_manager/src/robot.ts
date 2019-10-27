@@ -6,7 +6,6 @@ export default class Robot {
   launchCommands: Array<string>;
   rosnodes: Array<string>;
   rosrunCommands: Array<string>;
-  devices: Array<Device>;
 
   constructor (uuid: string, socketId: string, launchCommands: Array<string>, rosnodes: Array<string>, rosrunCommands: Array<string>) {
     this.uuid = uuid
@@ -14,6 +13,5 @@ export default class Robot {
     this.launchCommands = launchCommands
     this.rosnodes = rosnodes
     this.rosrunCommands = rosrunCommands
-    this.devices = []
   }
 }

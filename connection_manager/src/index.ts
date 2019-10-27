@@ -8,22 +8,25 @@ import Robot from './robot'
 import Device from './device'
 import WSResponse from './response'
 
+import inmemoryDb from './db/inmemory-database'
+
+let robotInmemoryDatabase: Array<Robot> = []
+let deviceInmemoryDatabase: Array<Device> = []
+
+const db = new inmemoryDb(robotInmemoryDatabase, deviceInmemoryDatabase)
+
 server.listen(80);
-
-let inmemoryDatabase: Array<Robot> = []
-
 app.use(cors())
 
 app.get('/list_connections', (req, res) => {
   res.writeHead(200)
-  res.write(JSON.stringify(inmemoryDatabase))
+  res.write(JSON.stringify(db.getAllRobots()))
   res.end()
 });
 
 app.get('/robots', (req, res) => {
-  const robot = _.find(inmemoryDatabase, (r) => {
-    return _.get(r, 'uuid') === _.get(req, 'query.uuid')
-  })
+  const robotUuid = _.get(req, 'query.uuid')
+  const robot = db.findRobotByUuid(robotUuid)
 
   res.writeHead(200)
   res.write(JSON.stringify(robot || {}))
@@ -51,65 +54,55 @@ io.of('/conn_device')
 
       const parsedPayload = JSON.parse(payload)
       const robot = new Robot(parsedPayload['uuid'], socket.id, parsedPayload['launch_commands'], parsedPayload['rosnodes'], parsedPayload['rosrun_commands'])
-      inmemoryDatabase.push(robot)
-      console.log('registered: ', inmemoryDatabase);
+      db.saveRobot(robot)
+      console.log('registered: ', db.getAllRobots());
     });
 
     // From ROS
     socket.on('update_rosnodes', (payload, msg) => {
       if (!payload) return
       const parsedPayload = JSON.parse(payload)
-      const robot = _.find(inmemoryDatabase, (r) => {
-        return _.get(r, 'uuid') === _.get(parsedPayload, 'uuid')
-      })
+      const robotUuid = _.get(parsedPayload, 'uuid')
+      const robot = db.findRobotByUuid(robotUuid)
       console.log(parsedPayload)
-      robot.rosnodes = _.get(parsedPayload, 'rosnodes') || []
+      const rosnodes = _.get(parsedPayload, 'rosnodes') || []
+      db.updateRobotRosnodes(robotUuid, rosnodes)
 
-      console.log('registered: ', inmemoryDatabase);
+      console.log('registered: ', db.getAllRobots());
     });
 
     socket.on('register_device', (payload, ack = _.noop) => {
       if (!payload) return
-      const robot = _.find(inmemoryDatabase, (r) => {
-        return _.get(r, 'uuid') === payload['robotUuid']
-      })
+      const robotUuid = _.get(payload, 'robotUuid')
+      const robot = db.findRobotByUuid(robotUuid)
 
       if (!robot) return // TODO some handling
-      const device = new Device(payload['deviceUuid'], socket.id)
-      robot.devices.push(device)
+      const device = new Device(payload['deviceUuid'], socket.id, robot.uuid)
+      db.saveDevice(device)
+      db.compactDeviceDb()
 
-      const index = _.findIndex(inmemoryDatabase, (r) => {
-        return _.get(r, 'uuid') === robot.id
-      })
-      inmemoryDatabase = _.compact(inmemoryDatabase)
-      console.log(inmemoryDatabase)
+      console.log(db.getAllDevices())
 
       const response = createSuccessResponse()
       ack(response)
     });
 
     socket.on('run_launch', (payload, ack = _.noop) => {
-      const robots = _.filter(inmemoryDatabase, (robot) => {
-        return _.get(robot, 'uuid') === payload['uuid']
-      })
+      const robotUuid = _.get(payload, 'uuid')
+      const robot = db.findRobotByUuid(robotUuid)
 
-      _.forEach(robots, (robot) => {
-        socket.to(robot.socketId).emit('run_launch', { socketId: robot.socketId, command: payload.command })
-      })
+      socket.to(robot.socketId).emit('run_launch', { socketId: robot.socketId, command: payload.command })
 
       const response = createSuccessResponse()
       ack(response)
     })
 
     socket.on('run_rosrun', (payload, ack = _.noop) => {
-      const robots = _.filter(inmemoryDatabase, (robot) => {
-        return _.get(robot, 'uuid') === payload['uuid']
-      })
+      const robotUuid = _.get(payload, 'uuid')
+      const robot = db.findRobotByUuid(robotUuid)
       console.log(payload)
 
-      _.forEach(robots, (robot) => {
-        socket.to(robot.socketId).emit('run_rosrun', { socketId: robot.socketId, command: payload.command, args: payload.args })
-      })
+      socket.to(robot.socketId).emit('run_rosrun', { socketId: robot.socketId, command: payload.command, args: payload.args })
 
       const response = createSuccessResponse()
       ack(response)
@@ -117,13 +110,10 @@ io.of('/conn_device')
 
     socket.on('delegate', (payload, ack = _.noop) => {
       console.log(payload)
-      const robots = _.filter(inmemoryDatabase, (robot) => {
-        return _.get(robot, 'uuid') === payload['robotUuid']
-      })
+      const robotUuid = _.get(payload, 'robotUuid')
+      const robot = db.findRobotByUuid(robotUuid)
 
-      _.forEach(robots, (robot) => {
-        socket.to(robot.socketId).emit('rostopic', _.get(payload, 'msg'))
-      })
+      socket.to(robot.socketId).emit('rostopic', _.get(payload, 'msg'))
 
       const response = createSuccessResponse()
       ack(response)
@@ -131,20 +121,15 @@ io.of('/conn_device')
 
     // From ROS
     socket.on('disconnect', () => {
-      const index = _.findIndex(inmemoryDatabase, (robot) => {
-        return _.get(robot, 'socketId') === socket.id
-      })
-      delete inmemoryDatabase[index]
-      inmemoryDatabase = _.compact(inmemoryDatabase)
+      db.removeRobot(socket.id)
     });
 
     // From ROS
     socket.on('topic_from_ros', (payload, ack = _.noop) => {
       const parsedPayload = JSON.parse(payload)
-      const robot = _.find(inmemoryDatabase, (r) => {
-        return _.get(r, 'uuid') === _.get(parsedPayload, 'robotUuid')
-      })
-      _.each(robot.devices, (device) => {
+      const robotUuid = _.get(parsedPayload, 'robotUuid')
+      const devices = db.getAllDevicesByRobotUuid(robotUuid)
+      _.each(devices, (device) => {
         _.each(_.get(parsedPayload, 'deviceUuids'), (payloadDeviceUuid) => {
           if (device.uuid == payloadDeviceUuid) {
             socket.to(device.socketId).emit('topic_to_device', payload)
@@ -158,9 +143,8 @@ io.of('/conn_device')
 
     socket.on('kill_rosnodes', (payload, ack = _.noop) => {
       console.log(payload)
-      const robot = _.find(inmemoryDatabase, (r) => {
-        return _.get(r, 'uuid') === _.get(payload, 'uuid')
-      })
+      const robotUuid = _.get(payload, 'uuid')
+      const robot = db.findRobotByUuid(robotUuid)
 
       socket.to(robot.socketId).emit('kill_rosnodes', { socketId: robot.socketId, rosnodes: _.get(payload, 'rosnodes') })
 

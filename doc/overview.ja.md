@@ -44,7 +44,7 @@ RowmaはROSのトピックを**誰でも遠隔地から簡単に**送受信す�
 ```
 $ git clone https://github.com/asmsuechan/rowma.git
 $ cd rowma
-$ cp -rf rowma_ros ~/catkin_ws
+$ cp -rf rowma_ros ~/catkin_ws/src
 $ cd ~/catkin_ws
 $ catkin_make
 $ rosrun rowma_ros rowma

@@ -50,17 +50,17 @@ app.get('/robots', (req, res) => {
 io.of('/conn_device')
   .on('connection', (socket) => {
     // From ROS
-    socket.on('register_robot', (payload, ack) => registerRobot(db, socket, payload, ack));
-    socket.on('update_rosnodes', (payload, ack) => updateRosnodes(db, payload, ack));
+    socket.on('register_robot', (payload: string, ack: Function = _.noop) => registerRobot(db, socket, payload, ack));
+    socket.on('update_rosnodes', (payload: string, ack: Function = _.noop) => updateRosnodes(db, payload, ack));
     socket.on('disconnect', () => db.removeRobot(socket.id));
-    socket.on('topic_from_ros', (payload, ack = _.noop) => topicFromRos(db, socket, payload, ack));
+    socket.on('topic_from_ros', (payload: string, ack: Function = _.noop) => topicFromRos(db, socket, payload, ack));
 
     // From Device
-    socket.on('register_device', (payload, ack = _.noop) => registerDevice(db, socket, payload, ack));
-    socket.on('run_launch', (payload, ack = _.noop) => runLaunch(db, socket, payload, ack))
-    socket.on('run_rosrun', (payload, ack = _.noop) => runRosrun(db, socket, payload, ack))
-    socket.on('delegate', (payload, ack = _.noop) => delegate(db, socket, payload, ack))
-    socket.on('kill_rosnodes', (payload, ack = _.noop) => killRosnode(db, socket, payload, ack))
+    socket.on('register_device', (payload: string, ack: Function = _.noop) => registerDevice(db, socket, payload, ack));
+    socket.on('run_launch', (payload: string, ack: Function = _.noop) => runLaunch(db, socket, payload, ack))
+    socket.on('run_rosrun', (payload: string, ack: Function = _.noop) => runRosrun(db, socket, payload, ack))
+    socket.on('delegate', (payload: string, ack: Function = _.noop) => delegate(db, socket, payload, ack))
+    socket.on('kill_rosnodes', (payload: string, ack: Function = _.noop) => killRosnode(db, socket, payload, ack))
 });
 
 // Note: https://blog.fullstacktraining.com/cannot-redeclare-block-scoped-variable-name/

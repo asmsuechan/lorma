@@ -41,7 +41,7 @@ RowmaはROSのトピックを**誰でも遠隔地から簡単に**送受信す�
 
 まず、ROSが動いているPC上で以下のコマンドを実行します。
 
-```
+```sh
 $ git clone https://github.com/asmsuechan/rowma.git
 $ cd rowma
 $ cp -rf rowma_ros ~/catkin_ws/src
@@ -65,4 +65,8 @@ $ rosrun rowma_ros rowma
 そこで、より**簡単に誰でも使えるシステム**が必要だと感じたのでこのシステムを作りました。
 
 ## 使用技術
-TODO
+通信基盤を、[socket.io](https://socket.io/)を用いたWebSocket通信により構築しました。socket.ioを使うことで、自前で全て実装するよりも安定していて高機能なPub/Sub型の通信を容易に実装することが出来ました。
+
+### ConnectionManager
+* nodejs v12.8.0
+* socket.io

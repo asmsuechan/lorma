@@ -14,5 +14,8 @@ module.exports = {
   "env": { "browser": true, "node": true, "es6": true },
   "parserOptions": {
     "sourceType": "module"
+  },
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "off"
   }
 };

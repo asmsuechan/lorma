@@ -13,7 +13,8 @@
     "build": "npm-run-all clean tsc",
     "start": "node .",
     "lint": "eslint src/**/* --fix",
-    "prettier": "prettier --write src/**/*"
+    "prettier": "prettier --write src/**/*",
+    "check": "npm run prettier && npm run lint"
   },
   "dependencies": {
     "@types/socket.io": "^2.1.4",

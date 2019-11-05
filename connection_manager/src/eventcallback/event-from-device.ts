@@ -6,11 +6,11 @@ import DatabaseInterface from "../db/database-interface";
 
 import _ from "lodash";
 
-const createSuccessResponse = (data = "") => {
+const createSuccessResponse = (data = ""): WSResponse => {
   return new WSResponse("success", data, "");
 };
 
-const createErrorResponse = (error = "") => {
+const createErrorResponse = (error = ""): WSResponse => {
   return new WSResponse("failed", "", error);
 };
 
@@ -19,7 +19,7 @@ const registerDevice = (
   socket: any,
   payload: string,
   ack: any
-) => {
+): void => {
   if (!payload) return;
   const robotUuid = _.get(payload, "robotUuid");
   const robot = db.findRobotByUuid(robotUuid);
@@ -39,7 +39,7 @@ const runLaunch = (
   socket: any,
   payload: any,
   ack: any
-) => {
+): void => {
   const robotUuid = _.get(payload, "uuid");
   const robot = db.findRobotByUuid(robotUuid);
 
@@ -56,7 +56,7 @@ const runRosrun = (
   socket: any,
   payload: any,
   ack: any
-) => {
+): void => {
   const robotUuid = _.get(payload, "uuid");
   const robot = db.findRobotByUuid(robotUuid);
   console.log(payload);
@@ -77,7 +77,7 @@ const delegate = (
   socket: any,
   payload: string,
   ack: any
-) => {
+): void => {
   const robotUuid = _.get(payload, "robotUuid");
   const robot = db.findRobotByUuid(robotUuid);
 
@@ -92,7 +92,7 @@ const killRosnode = (
   socket: any,
   payload: string,
   ack: any
-) => {
+): void => {
   const robotUuid = _.get(payload, "uuid");
   const robot = db.findRobotByUuid(robotUuid);
 

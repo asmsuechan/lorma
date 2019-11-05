@@ -5,11 +5,11 @@ import DatabaseInterface from "../db/database-interface";
 
 import _ from "lodash";
 
-const createSuccessResponse = (data = "") => {
+const createSuccessResponse = (data = ""): WSResponse => {
   return new WSResponse("success", data, "");
 };
 
-const createErrorResponse = (error = "") => {
+const createErrorResponse = (error = ""): WSResponse => {
   return new WSResponse("failed", "", error);
 };
 
@@ -19,7 +19,7 @@ const registerRobot = (
   socket: any,
   payload: string,
   ack: any
-) => {
+): void => {
   if (!payload) {
     const msg = "Payload must be included.";
     const response = createErrorResponse(msg);
@@ -39,7 +39,11 @@ const registerRobot = (
   console.log("registered: ", db.getAllRobots());
 };
 
-const updateRosnodes = (db: DatabaseInterface, payload: string, ack: any) => {
+const updateRosnodes = (
+  db: DatabaseInterface,
+  payload: string,
+  ack: any
+): void => {
   if (!payload) return;
   const parsedPayload = JSON.parse(payload);
   const robotUuid = _.get(parsedPayload, "uuid");
@@ -56,7 +60,7 @@ const topicFromRos = (
   socket: any,
   payload: string,
   ack: any
-) => {
+): void => {
   const parsedPayload = JSON.parse(payload);
   const robotUuid = _.get(parsedPayload, "robotUuid");
   const devices = db.getAllDevicesByRobotUuid(robotUuid);

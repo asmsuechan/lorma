@@ -1,8 +1,11 @@
-const app = require("express")();
-const cors = require("cors");
+import express from "express";
+import cors from "cors";
+import socketio from "socket.io";
+import _ from "lodash";
+
+const app = express();
 const server = require("http").Server(app);
-const io = require("socket.io")(server);
-const _ = require("lodash");
+const io = socketio(server);
 
 import Robot from "./domain/robot";
 import Device from "./domain/device";

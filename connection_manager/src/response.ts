@@ -3,9 +3,9 @@ export default class WSResponse {
   data: string;
   error: string;
 
-  constructor (status: string, data: string, error: string) {
-    this.status = status
-    this.data = data
-    this.error = error
+  constructor(status: string, data: string, error: string) {
+    this.status = status;
+    this.data = data;
+    this.error = error;
   }
 }

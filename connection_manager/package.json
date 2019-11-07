@@ -14,7 +14,7 @@
     "start": "node .",
     "lint": "eslint 'src/**/*.ts' --fix",
     "prettier": "prettier --write 'src/**/*.ts'",
-    "check": "npm run prettier && npm run lint"
+    "check": "npm-run-all prettier lint"
   },
   "dependencies": {
     "@types/socket.io": "^2.1.4",

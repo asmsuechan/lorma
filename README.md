@@ -29,18 +29,12 @@ This tutorial uses [rowma_sample](https://github.com/asmsuechan/rowma_sample) to
 * ROS: Kinetic
 
 ### (1) On your ROS based robot
-#### 1. Clone this repository
+#### 1. Clone rowma_ros to your catkin workspace
 ```
-$ git clone git@github.com:asmsuechan/rowma.git ~/
-```
-
-#### 2. Copy `rowma_ros` into your ros workspace
-
-```
-$ cp -rf ~/rowma/rowma_ros ~/catkin_ws/src
+$ git clone git@github.com:asmsuechan/rowma_ros.git ~/catkin_ws/src
 ```
 
-#### 3. Run `rowma_ros`
+#### 2. Run `rowma_ros`
 ```
 $ pip install "python-socketio[client]" requests Geohash
 $ cd ~/catkin_ws
@@ -79,4 +73,7 @@ You will see this page.
 ![img2](/doc/images/sample-application.png)
 
 ## Development
-TODO
+This system consists of [connection_manager](https://github.com/asmsuechan/rowma_connection_manager), [rowma_ros](https://github.com/asmsuechan/rowma_ros), and SDKs. Open issues/PRs in the each projects when you find some issues.
+
+### SDKs
+* [nodejs SDK](https://github.com/asmsuechan/rowma_js)

@@ -1,5 +1,5 @@
 # Rowma
-> Run local robots over the Internet
+> ロボットをインターネット越しに動かす
 
 ![gifimg](/doc/images/overview.gif)
 
@@ -20,18 +20,12 @@ RowmaはROSベースのロボットを管理するシステムで、ROSに関す
 * Python: 2.7
 * ROS: Kinetic
 
-#### 1. このリポジトリをcloneする
+#### 1. rowma_rosをcatkinワークスペース内にcloneする
 ```
-$ git clone git@github.com:asmsuechan/rowma.git ~/
-```
-
-#### 2. `rowma_ros`をcatkinワークスペースにコピーする
-
-```
-$ cp -rf ~/rowma/rowma_ros ~/catkin_ws/src
+$ git clone git@github.com:asmsuechan/rowma_ros.git ~/catkin_ws/src
 ```
 
-#### 3. `rowma_ros`を実行する
+#### 2. `rowma_ros`を実行する
 ```
 $ pip install "python-socketio[client]" requests Geohash
 $ cd ~/catkin_ws
@@ -71,5 +65,11 @@ $ npm start
 
 ![img2](/doc/images/sample-application.png)
 
+## How it works
+ROSが動くマシンで`rosrun rowma_ros rowma`を実行するとこちらでホストしているロボット管理用WebSocketサーバーに接続されます。そしてブラウザ等からそのロボットに任意のトピックをPublishしたり、任意のトピックをSubscribeしたりできます。
+
 ## Development
-TODO
+このシステムは[connection_manager](https://github.com/asmsuechan/rowma_connection_manager), [rowma_ros](https://github.com/asmsuechan/rowma_ros), そしてSDKで構成されています。もし何か問題を見つけた時はそれぞれのリポジトリでissueを作成してください。
+
+### SDKs
+* [nodejs SDK](https://github.com/asmsuechan/rowma_js)

@@ -68,6 +68,9 @@ $ npm start
 ## How it works
 ROSが動くマシンで`rosrun rowma_ros rowma`を実行するとこちらでホストしているロボット管理用WebSocketサーバーに接続されます。そしてブラウザ等からそのロボットに任意のトピックをPublishしたり、任意のトピックをSubscribeしたりできます。
 
+## About this repository
+このリポジトリはrowmaシステムのメインリポジトリです。気軽にissueを立ててわからないことを質問してください。
+
 ## Development
 このシステムは[connection_manager](https://github.com/asmsuechan/rowma_connection_manager), [rowma_ros](https://github.com/asmsuechan/rowma_ros), そしてSDKで構成されています。もし何か問題を見つけた時はそれぞれのリポジトリでissueを作成してください。
 

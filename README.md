@@ -72,6 +72,9 @@ You will see this page.
 
 ![img2](/doc/images/sample-application.png)
 
+## About this repository
+This repository is a main repository for rowma system, feel free to ask questions at a issue.
+
 ## Development
 This system consists of [connection_manager](https://github.com/asmsuechan/rowma_connection_manager), [rowma_ros](https://github.com/asmsuechan/rowma_ros), and SDKs. Open issues/PRs in the each projects when you find some issues.
 

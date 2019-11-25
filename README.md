@@ -10,7 +10,7 @@ Rowma is a ROS-based robots management system which allows robots operate throug
 * Easy to integrate
 * Clear API
 
-In addition, Rowma stands for **RO**S **W**eb **Ma**nager.
+In addition, Rowma stands for **Ro**bot **W**eb **Ma**nager.
 
 [日本語](/doc/README.ja.md)
 

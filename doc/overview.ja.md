@@ -2,6 +2,13 @@
 RowmaはROSのトピックを**誰でも遠隔地から簡単に**送受信する事ができるようになるシステムです。
 [github.com/asmsuechan/rowma](https://github.com/asmsuechan/rowma)
 
+## プロジェクトリポジトリ
+このシステムは現在以下の3つのソフトウェアで構成されています。本リポジトリはドキュメント用になります。
+
+* [ConnectionManager](https://github.com/asmsuechan/rowma_connection_manager)
+* [rowma_ros](https://github.com/asmsuechan/rowma_ros)
+* [JavaScript SDK](https://github.com/asmsuechan/rowma_js)
+
 ## デモ
 スマートフォンから/joyにメッセージをpublishして四輪ロボットを操作するデモです。
 

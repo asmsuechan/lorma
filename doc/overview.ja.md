@@ -1,5 +1,5 @@
 ## 概要
-RowmaはROSのトピックを**誰でも遠隔地から簡単に**送受信する事ができるようになるシステムです。
+rowmaはロボットをWeb上で管理する事ができるツールで、遠隔操作や監視などが機能に含まれています。
 [github.com/asmsuechan/rowma](https://github.com/asmsuechan/rowma)
 
 ## プロジェクトリポジトリ

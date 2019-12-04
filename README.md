@@ -14,69 +14,37 @@ In addition, Rowma stands for **Ro**bot **W**eb **Ma**nager.
 
 [日本語](/doc/README.ja.md)
 
-## Features
+# Features
 * Run `roslaunch` command over the Internet
 * Run `rosrun` command over the Internet
 * Kill a rosnode over the Internet
 * Publish a message to a rostopic over the Internet
 * Subscribe a rostopic over the Internet
 
-## Get started
+# Get started
 This tutorial uses [rowma_sample](https://github.com/asmsuechan/rowma_sample) to execute roslaunch over the Internet.
 
-### Environments
-* Python: 2.7
-* ROS: Kinetic
-
-### (1) On your ROS based robot
-#### 1. Clone rowma_ros to your catkin workspace
-```
-$ git clone git@github.com:asmsuechan/rowma_ros.git ~/catkin_ws/src
-```
-
-#### 2. Run `rowma_ros`
-```
-$ pip install "python-socketio[client]" requests Geohash
-$ cd ~/catkin_ws
+```sh
+$ cd ~/catkin_ws/src
+$ git clone https://github.com/asmsuechan/rowma_ros
+$ cd rowma_ros
+$ pip install -r requirements.txt
+$ cd ../..
 $ catkin_make
 $ rosrun rowma_ros rowma
+Your UUID is: 4366a075-539d-4a05-8f99-d7fe8d2a5bc0
 ```
 
-Then confirm the UUID provided by the ROS process.
+Then access `http://18.176.1.219:3000`.
 
-![img1](/doc/images/rosrun.png)
-
-### (2) Setup Sample Web Manager
-#### Environments
-* Google Chrome
-* nodejs
-
-#### 1. Clone sample repository
-```
-$ git clone git@github.com:asmsuechan/rowma_sample.git ~/
-```
-
-#### 2. Run npm install
-```
-$ cd ~/rowma_sample
-$ npm i
-```
-
-#### 3. Start the application
-```
-$ npm start
-```
-
-#### 4. Open localhost:3000
-You will see this page.
-
-![img2](/doc/images/sample-application.png)
-
-## About this repository
+# About this repository
 This repository is a main repository for rowma system, feel free to ask questions at a issue.
 
-## Development
+# Development
 This system consists of [connection_manager](https://github.com/asmsuechan/rowma_connection_manager), [rowma_ros](https://github.com/asmsuechan/rowma_ros), and SDKs. Open issues/PRs in the each projects when you find some issues.
 
-### SDKs
+## SDKs
 * [nodejs SDK](https://github.com/asmsuechan/rowma_js)
+
+# TODO
+* Write how to up own connection manager

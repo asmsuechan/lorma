@@ -1,4 +1,4 @@
-# Rowma
+# rowma
 <p align="center">
   <img width="460" src="/doc/images/rowma_logo.png">
 </p>

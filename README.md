@@ -1,4 +1,8 @@
 # Rowma
+<p align="center">
+  <img width="460" src="/doc/images/rowma_logo.png">
+</p>
+
 > Run local robots over the Internet
 
 Demo video (jump to YouTube)

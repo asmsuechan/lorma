@@ -3,7 +3,7 @@
 
 Demo video (jump to YouTube)
 
-[![YouTube demo video](https://img.youtube.com/vi/qRJ_QeVnfb8/0.jpg)](https://www.youtube.com/watch?v=qRJ_QeVnfb8)
+[![YouTube demo video](https://img.youtube.com/vi/cOwHWh60PCk/0.jpg)](https://youtu.be/cOwHWh60PCk)
 
 Rowma is a ROS-based robots management system which allows robots operate through the Internet.
 

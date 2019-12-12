@@ -26,7 +26,7 @@ In addition, Rowma stands for **Ro**bot **W**eb **Ma**nager.
 * Subscribe a rostopic over the Internet
 
 # Get started
-This tutorial uses [rowma_sample](https://github.com/asmsuechan/rowma_sample) to execute roslaunch over the Internet.
+This tutorial uses [rowma-sample](https://github.com/asmsuechan/rowma-sample) to execute roslaunch over the Internet.
 
 ```sh
 $ cd ~/catkin_ws/src

@@ -1,4 +1,4 @@
-**Main repository was moved to [rowma/rowma](https://github.com/rowma)**
+# **Main repository was moved to [rowma/rowma](https://github.com/rowma)**
 
 # rowma
 <p align="center">

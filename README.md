@@ -1,3 +1,5 @@
+**Main repository was moved to [rowma/rowma](https://github.com/rowma)**
+
 # rowma
 <p align="center">
   <img width="460" src="/doc/images/rowma_logo.png">
